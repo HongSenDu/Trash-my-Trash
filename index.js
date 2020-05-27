@@ -139,14 +139,6 @@ function handleStartSearchNoPostback(sender_psid){
   callSendAPI(sender_psid, noPayload);
 }
 
-function handleTestPhone(sender_psid){
-  const phonePayload = {
-    "text": "BRB, selling your phone number on the dark web"
-  };
-  callSendAPI(sender_psid, phonePayload);
-}
-
-
 function handleOtherHelpPostback(sender_psid){
   const campaigns = {
     "attachment":{
@@ -224,11 +216,18 @@ function handleAustraliaYesPostback(sender_psid){
     "quick_replies":[
       {
        "content_type":"user_phone_number",
-        "payload": "TEST_PHONE"
+        "payload": TEST_PHONE
       }
     ]
   };
-  callSendAPI(sender_psid, askForNumberPayload);
+  callSendAPI(sender_psid, askForPhoneNumberPayload);
+}
+
+function handleTestPhone(sender_psid){
+  const phonePayload = {
+    "text": "BRB, selling your phone number on the dark web"
+  };
+  callSendAPI(sender_psid, phonePayload);
 }
 
 function handlePostback(sender_psid, received_postback) {
