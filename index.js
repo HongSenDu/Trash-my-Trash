@@ -230,7 +230,7 @@ function handleTestPhone(sender_psid){
     "quick_replies":[
       {
         "content_type":"text",
-       "title": "bruh"
+        "title": "bruh"
       }
     ]
   };
@@ -241,6 +241,9 @@ function handlePostback(sender_psid, received_postback) {
   // Get the payload for the postback
   const payload = received_postback.payload;
   // Set the response based on the postback payload
+  if (phoneUtil.isValidNumber(phoneUtil.parse(payload)))
+    handleTestPhone(sender_psid);
+
   switch (true){
     case payload === START_SEARCH_YES:
       handleStartSearchYesPostback(sender_psid);
@@ -253,9 +256,6 @@ function handlePostback(sender_psid, received_postback) {
       break;
     case payload === AUSTRALIA_YES:
       handleAustraliaYesPostback(sender_psid);
-      break;
-    case phoneUtil.isValidNumber(phoneUtil.parse(payload)) === true:
-      handleTestPhone(sender_psid);
       break;
     case payload === GREETING:
       handleGreetingPostback(sender_psid);
