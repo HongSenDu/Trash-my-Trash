@@ -85,15 +85,14 @@ app.get('/webhook', (req, res) => {
 
     } else {
       // Responds with '403 Forbidden' if verify tokens do not match
-      console.log("hi");
-      res.sendStatus(403);
+       res.sendStatus(403);
     }
   }
 });
 
 function handleMessage(sender_psid) {
   const response = {
-    "text": "Hi, it would take me some times to answer your message. Are you looking for opportunities to join a community of like-minded pandas in your area?",
+    "text": "Hi are you on the Trash My Trash Team",
     "quick_replies":[
       {
         "content_type":"text",
@@ -113,7 +112,7 @@ function handleMessage(sender_psid) {
 
 function handleStartSearchYesPostback(sender_psid){
   const yesPayload = {
-    "text": " Ok, I have to get to know you a little bit more for this. Do you live in Australia?",
+    "text": "Ok then you're cool",
     "quick_replies":[
       {
         "content_type":"text",
@@ -132,7 +131,7 @@ function handleStartSearchYesPostback(sender_psid){
 
 function handleStartSearchNoPostback(sender_psid){
   const noPayload = {
-    "text": "That's ok my friend, do you want to find other ways to help WWF?",
+    "text": "You're not cool then",
     "quick_replies":[
       {
         "content_type":"text",
