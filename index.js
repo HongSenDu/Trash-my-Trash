@@ -11,6 +11,7 @@ const TEST_PHONE = "TEST_PHONE";
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v2.6/';
 
 const
+  phone = require('libphonenumber-js'),
   request = require('request'),
   express = require('express'),
   body_parser = require('body-parser'),
@@ -253,7 +254,7 @@ function handlePostback(sender_psid, received_postback) {
     case AUSTRALIA_YES:
       handleAustraliaYesPostback(sender_psid);
       break;
-    case TEST_PHONE:
+    case (phone.parsePhoneNumberFromString(payload).isValid() === true):
       handleTestPhone(sender_psid);
       break;
     case GREETING:
