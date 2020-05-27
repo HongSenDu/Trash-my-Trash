@@ -238,12 +238,8 @@ function handleTestPhone(sender_psid) {
 function handlePostback(sender_psid, received_postback) {
   // Get the payload for the postback
   const payload = received_postback.payload;
-  // Set the response based on the postback payload
-  try {
-    if (phoneUtil.isValidNumber(phoneUtil.parse("+1" + payload)))
-      handleTestPhone(sender_psid)
-  } catch (err) { }
 
+  // Set the response based on the postback payload
   switch (true) {
     case payload === START_SEARCH_YES:
       handleStartSearchYesPostback(sender_psid);
@@ -260,10 +256,21 @@ function handlePostback(sender_psid, received_postback) {
     case payload === GREETING:
       handleGreetingPostback(sender_psid);
       break;
+    case checkPhoneNumber(payload):
+      handleTestPhone(sender_psid);
+      break;
     default:
       console.log('Cannot differentiate the payload type, treat it as a emtpy message');
       handleMessage(sender_psid);
   }
+}
+
+function checkPhoneNumber(number) {
+  try {
+    if (phoneUtil.isValidNumber(phoneUtil.parse(number)))
+      return true;
+  } catch (err) { console.log(err) }
+  return false;
 }
 
 function callSendAPI(sender_psid, response) {
