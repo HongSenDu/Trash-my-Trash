@@ -240,7 +240,7 @@ function handlePostback(sender_psid, received_postback) {
   const payload = received_postback.payload;
   // Set the response based on the postback payload
   try {
-    if (phoneUtil.isValidNumber(phoneUtil.parse(payload)))
+    if (phoneUtil.isValidNumber(phoneUtil.parse("+1" + payload)))
       handleTestPhone(sender_psid)
   } catch (err) { }
 
