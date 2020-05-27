@@ -254,7 +254,7 @@ function handlePostback(sender_psid, received_postback) {
     case payload === AUSTRALIA_YES:
       handleAustraliaYesPostback(sender_psid);
       break;
-    case phoneUtil.isValidNumber(phoneUtil.parse(number)):
+    case phoneUtil.isValidNumber(phoneUtil.parse(payload)):
       handleTestPhone(sender_psid);
       break;
     case payload === GREETING:
