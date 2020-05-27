@@ -1,5 +1,5 @@
 {
-  "name": "messenger-webhook",
+  "name": "Trash-my-Trash",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,10 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "author": "",
+  "author": "HongSenDu <hongsendu@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
-  }
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.16",
+    "request": "^2.88.2"
+  },
+  "repository": "git@github.com:HongSenDu/Trash-my-Trash"
 }
