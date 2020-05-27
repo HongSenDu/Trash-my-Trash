@@ -141,7 +141,7 @@ function handleStartSearchNoPostback(sender_psid){
 
 function handleTestPhone(sender_psid){
   const phonePayload = {
-    "text": "BRB, selling your phone number on the dark web",
+    "text": "BRB, selling your phone number on the dark web"
   };
   callSendAPI(sender_psid, phonePayload);
 }
