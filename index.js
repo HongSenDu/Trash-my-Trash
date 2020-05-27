@@ -7,6 +7,7 @@ const GREETING = 'GREETING';
 const AUSTRALIA_YES = 'AUSTRALIA_YES';
 const AUSTRALIA_NO = 'AUSTRALIA_NO';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
+const TEST_PHONE = "TEST_PHONE"
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v2.6/';
 
 const
@@ -116,15 +117,9 @@ function handleStartSearchYesPostback(sender_psid){
     "quick_replies":[
       {
         "content_type":"text",
-        "title":"Yes!",
+        "title":"I want to give you my phone number",
         "payload": AUSTRALIA_YES
-      },
-      {
-        "content_type":"text",
-        "title":"Nope.",
-        "payload": AUSTRALIA_NO
-      }
-    ]
+      }    ]
   };
   callSendAPI(sender_psid, yesPayload);
 }
@@ -142,6 +137,14 @@ function handleStartSearchNoPostback(sender_psid){
   };
   callSendAPI(sender_psid, noPayload);
 }
+
+function handleTestPhone(sender_psid){
+  const phonePayload = {
+    "text": "BRB, selling your phone number on the dark web",
+  };
+  callSendAPI(sender_psid, phonePayload);
+}
+
 
 function handleOtherHelpPostback(sender_psid){
   const campaigns = {
@@ -215,16 +218,16 @@ function handleGreetingPostback(sender_psid){
 }
 
 function handleAustraliaYesPostback(sender_psid){
-  const askForLocationPayload = {
-    "text": "Where about do you live?",
+  const askForPhoneNumberPayload = {
+    "text": "What is your phone number",
     "quick_replies":[
       {
-        "content_type":"location",
-        "payload": "TEST_LOCATION"
+       "content_type":"user_phone_number",
+        "payload": "TEST_PHONE"
       }
     ]
   };
-  callSendAPI(sender_psid, askForLocationPayload);
+  callSendAPI(sender_psid, askForNumberPayload);
 }
 
 function handlePostback(sender_psid, received_postback) {
@@ -243,6 +246,9 @@ function handlePostback(sender_psid, received_postback) {
       break;
     case AUSTRALIA_YES:
       handleAustraliaYesPostback(sender_psid);
+      break;
+    case TEST_PHONE:
+      handleTestPhone(sender_psid);
       break;
     case GREETING:
       handleGreetingPostback(sender_psid);
