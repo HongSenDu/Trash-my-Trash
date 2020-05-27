@@ -19,7 +19,6 @@ const
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-console.log(phoneUtil.isValidNumber(phoneUtil.parse(+6462395037))===true)
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
@@ -29,7 +28,7 @@ app.post('/webhook', (req, res) => {
   // Check the webhook event is from a Page subscription
   if (body.object === 'page') {
 
-    body.entry.forEach(function(entry) {
+    body.entry.forEach(function (entry) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
       console.log('Webhook event:', webhook_event);
@@ -45,9 +44,9 @@ app.post('/webhook', (req, res) => {
       } else if (webhook_event.message) {
         console.log('webhook_event.message', JSON.stringify(webhook_event.message));
         console.log('webhook_event.message["quick_reply"]', webhook_event.message["quick_reply"]);
-        if (webhook_event.message.quick_reply){
+        if (webhook_event.message.quick_reply) {
           handlePostback(sender_psid, webhook_event.message.quick_reply);
-        } else{
+        } else {
           handleMessage(sender_psid);
         }
       }
@@ -66,7 +65,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   /** UPDATE YOUR VERIFY TOKEN **/
-  const VERIFY_TOKEN = "68hIGOi2qM"; 
+  const VERIFY_TOKEN = "68hIGOi2qM";
 
 
   // Parse params from the webhook verification request
@@ -87,7 +86,7 @@ app.get('/webhook', (req, res) => {
 
     } else {
       // Responds with '403 Forbidden' if verify tokens do not match
-       res.sendStatus(403);
+      res.sendStatus(403);
     }
   }
 });
@@ -95,14 +94,14 @@ app.get('/webhook', (req, res) => {
 function handleMessage(sender_psid) {
   const response = {
     "text": "Hi are you on the Trash My Trash Team",
-    "quick_replies":[
+    "quick_replies": [
       {
-        "content_type":"text",
-        "title":"Yes!",
+        "content_type": "text",
+        "title": "Yes!",
         "payload": START_SEARCH_YES
-      },{
-        "content_type":"text",
-        "title":"No, thanks.",
+      }, {
+        "content_type": "text",
+        "title": "No, thanks.",
         "payload": START_SEARCH_NO
       }
     ]
@@ -112,27 +111,27 @@ function handleMessage(sender_psid) {
   callSendAPI(sender_psid, response);
 }
 
-function handleStartSearchYesPostback(sender_psid){
+function handleStartSearchYesPostback(sender_psid) {
   const yesPayload = {
     "text": "Ok then you're cool",
-    "quick_replies":[
+    "quick_replies": [
       {
-        "content_type":"text",
-        "title":"I want to give you my phone number",
+        "content_type": "text",
+        "title": "I want to give you my phone number",
         "payload": AUSTRALIA_YES
-      }    
+      }
     ]
   };
   callSendAPI(sender_psid, yesPayload);
 }
 
-function handleStartSearchNoPostback(sender_psid){
+function handleStartSearchNoPostback(sender_psid) {
   const noPayload = {
     "text": "You're not cool then",
-    "quick_replies":[
+    "quick_replies": [
       {
-        "content_type":"text",
-        "title":"Yes.",
+        "content_type": "text",
+        "title": "Yes.",
         "payload": OTHER_HELP_YES
       }
     ]
@@ -140,41 +139,41 @@ function handleStartSearchNoPostback(sender_psid){
   callSendAPI(sender_psid, noPayload);
 }
 
-function handleOtherHelpPostback(sender_psid){
+function handleOtherHelpPostback(sender_psid) {
   const campaigns = {
-    "attachment":{
-       "type":"template",
-       "payload":{
-         "template_type":"generic",
-         "elements":[
-            {
-             "title":"We need your help",
-             "image_url":"http://awsassets.panda.org/img/original/wwf_infographic_tropical_deforestation.jpg",
-             "subtitle":"to save our natural world",
-             "buttons":[
-               {
-                 "type":"web_url",
-                 "url":"https://donate.wwf.org.au/campaigns/rhinoappeal/",
-                 "title":"Javan Rhino Appeal"
-               },{
-                 "type":"web_url",
-                 "url":"https://donate.wwf.org.au/campaigns/donate/#AD",
-                 "title":"Adopt an Animal"
-               },{
-                 "type":"web_url",
-                 "url":"https://donate.wwf.org.au/campaigns/wildcards/",
-                 "title":"Send a wildcard"
-               }
-             ]
-           }
-         ]
-       }
-     }
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": [
+          {
+            "title": "We need your help",
+            "image_url": "http://awsassets.panda.org/img/original/wwf_infographic_tropical_deforestation.jpg",
+            "subtitle": "to save our natural world",
+            "buttons": [
+              {
+                "type": "web_url",
+                "url": "https://donate.wwf.org.au/campaigns/rhinoappeal/",
+                "title": "Javan Rhino Appeal"
+              }, {
+                "type": "web_url",
+                "url": "https://donate.wwf.org.au/campaigns/donate/#AD",
+                "title": "Adopt an Animal"
+              }, {
+                "type": "web_url",
+                "url": "https://donate.wwf.org.au/campaigns/wildcards/",
+                "title": "Send a wildcard"
+              }
+            ]
+          }
+        ]
+      }
+    }
   };
   callSendAPI(sender_psid, campaigns);
 }
 
-function handleGreetingPostback(sender_psid){
+function handleGreetingPostback(sender_psid) {
   request({
     url: `${FACEBOOK_GRAPH_API_BASE_URL}${sender_psid}`,
     qs: {
@@ -182,10 +181,10 @@ function handleGreetingPostback(sender_psid){
       fields: "first_name"
     },
     method: "GET"
-  }, function(error, response, body) {
+  }, function (error, response, body) {
     var greeting = "";
     if (error) {
-      console.log("Error getting user's name: " +  error);
+      console.log("Error getting user's name: " + error);
     } else {
       var bodyObj = JSON.parse(body);
       const name = bodyObj.first_name;
@@ -194,15 +193,15 @@ function handleGreetingPostback(sender_psid){
     const message = greeting + "Would you like to join a community of like-minded pandas in your area?";
     const greetingPayload = {
       "text": message,
-      "quick_replies":[
+      "quick_replies": [
         {
-          "content_type":"text",
-          "title":"Yes!",
+          "content_type": "text",
+          "title": "Yes!",
           "payload": START_SEARCH_YES
         },
         {
-          "content_type":"text",
-          "title":"No, thanks.",
+          "content_type": "text",
+          "title": "No, thanks.",
           "payload": START_SEARCH_NO
         }
       ]
@@ -211,25 +210,25 @@ function handleGreetingPostback(sender_psid){
   });
 }
 
-function handleAustraliaYesPostback(sender_psid){
+function handleAustraliaYesPostback(sender_psid) {
   const askForPhoneNumberPayload = {
     "text": "What is your phone number",
-    "quick_replies":[
+    "quick_replies": [
       {
-       "content_type":"user_phone_number"
+        "content_type": "user_phone_number"
       }
     ]
   };
   callSendAPI(sender_psid, askForPhoneNumberPayload);
 }
 
-function handleTestPhone(sender_psid){
+function handleTestPhone(sender_psid) {
   const phonePayload = {
     "text": "BRB, selling your phone number on the dark web",
-    "quick_replies":[
+    "quick_replies": [
       {
-        "content_type":"text",
-       "title": "bruh"
+        "content_type": "text",
+        "title": "bruh"
       }
     ]
   };
@@ -240,7 +239,12 @@ function handlePostback(sender_psid, received_postback) {
   // Get the payload for the postback
   const payload = received_postback.payload;
   // Set the response based on the postback payload
-  switch (true){
+  try {
+    if (phoneUtil.isValidNumber(phoneUtil.parse(payload)))
+      handleTestPhone(sender_psid)
+  } catch (err) { }
+
+  switch (true) {
     case payload === START_SEARCH_YES:
       handleStartSearchYesPostback(sender_psid);
       break;
@@ -255,9 +259,6 @@ function handlePostback(sender_psid, received_postback) {
       break;
     case payload === GREETING:
       handleGreetingPostback(sender_psid);
-      break;
-    case phoneUtil.isValidNumber(phoneUtil.parse(payload.toString())):
-      handleTestPhone(sender_psid);
       break;
     default:
       console.log('Cannot differentiate the payload type, treat it as a emtpy message');
