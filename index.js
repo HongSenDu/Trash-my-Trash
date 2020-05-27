@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config()
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const START_SEARCH_NO = 'START_SEARCH_NO';
 const START_SEARCH_YES = 'START_SEARCH_YES';
@@ -54,6 +55,7 @@ app.post('/webhook', (req, res) => {
 
   } else {
     // Return a '404 Not Found' if event is not from a page subscription
+
     res.sendStatus(404);
   }
 });
@@ -64,9 +66,11 @@ app.get('/webhook', (req, res) => {
   /** UPDATE YOUR VERIFY TOKEN **/
   const VERIFY_TOKEN = process.env.VERIFICATION_TOKEN;
 
+
   // Parse params from the webhook verification request
   let mode = req.query['hub.mode'];
   let token = req.query['hub.verify_token'];
+
   let challenge = req.query['hub.challenge'];
 
   // Check if a token and mode were sent
@@ -81,6 +85,7 @@ app.get('/webhook', (req, res) => {
 
     } else {
       // Responds with '403 Forbidden' if verify tokens do not match
+      console.log("hi");
       res.sendStatus(403);
     }
   }
