@@ -64,7 +64,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   /** UPDATE YOUR VERIFY TOKEN **/
-  const VERIFY_TOKEN = process.env.VERIFICATION_TOKEN;
+  const VERIFY_TOKEN = "68hIGOi2qM"; 
 
 
   // Parse params from the webhook verification request
