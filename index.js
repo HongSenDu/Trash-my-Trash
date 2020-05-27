@@ -225,7 +225,13 @@ function handleAustraliaYesPostback(sender_psid){
 
 function handleTestPhone(sender_psid){
   const phonePayload = {
-    "text": "BRB, selling your phone number on the dark web"
+    "text": "BRB, selling your phone number on the dark web",
+    "quick_replies":[
+      {
+        "content_type":"text",
+       "title": "bruh"
+      }
+    ]
   };
   callSendAPI(sender_psid, phonePayload);
 }
