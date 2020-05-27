@@ -118,7 +118,7 @@ function handleStartSearchYesPostback(sender_psid){
       {
         "content_type":"text",
         "title":"I want to give you my phone number",
-        "payload": AUSTRALIA_YES
+        "payload": TEST_PHONE
       }    ]
   };
   callSendAPI(sender_psid, yesPayload);
