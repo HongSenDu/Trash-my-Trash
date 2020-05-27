@@ -119,7 +119,8 @@ function handleStartSearchYesPostback(sender_psid){
         "content_type":"text",
         "title":"I want to give you my phone number",
         "payload": TEST_PHONE
-      }    ]
+      }    
+    ]
   };
   callSendAPI(sender_psid, yesPayload);
 }
