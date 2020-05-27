@@ -7,7 +7,7 @@ const GREETING = 'GREETING';
 const AUSTRALIA_YES = 'AUSTRALIA_YES';
 const AUSTRALIA_NO = 'AUSTRALIA_NO';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
-const TEST_PHONE = "TEST_PHONE"
+const TEST_PHONE = "TEST_PHONE";
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v2.6/';
 
 const
