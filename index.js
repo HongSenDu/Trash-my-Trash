@@ -241,23 +241,23 @@ function handlePostback(sender_psid, received_postback) {
   // Get the payload for the postback
   const payload = received_postback.payload;
   // Set the response based on the postback payload
-  switch (payload){
-    case START_SEARCH_YES:
+  switch (true){
+    case payload === START_SEARCH_YES:
       handleStartSearchYesPostback(sender_psid);
       break;
-    case START_SEARCH_NO:
+    case payload === START_SEARCH_NO:
       handleStartSearchNoPostback(sender_psid);
       break;
-    case OTHER_HELP_YES:
+    case payload === OTHER_HELP_YES:
       handleOtherHelpPostback(sender_psid);
       break;
-    case AUSTRALIA_YES:
+    case payload === AUSTRALIA_YES:
       handleAustraliaYesPostback(sender_psid);
       break;
-    case (parsePhoneNumberFromString(payload).isValid() === true):
+    case (parsePhoneNumberFromString(payload).isValid()):
       handleTestPhone(sender_psid);
       break;
-    case GREETING:
+    case payload === GREETING:
       handleGreetingPostback(sender_psid);
       break;
     default:
