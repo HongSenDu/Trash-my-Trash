@@ -7,7 +7,6 @@ const GREETING = 'GREETING';
 const AUSTRALIA_YES = 'AUSTRALIA_YES';
 const AUSTRALIA_NO = 'AUSTRALIA_NO';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
-const TEST_PHONE = "TEST_PHONE";
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v2.6/';
 
 const
@@ -20,6 +19,7 @@ const
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+console.log(phoneUtil.isValidNumber(phoneUtil.parse(+6462395037))===true)
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
@@ -216,8 +216,7 @@ function handleAustraliaYesPostback(sender_psid){
     "text": "What is your phone number",
     "quick_replies":[
       {
-       "content_type":"user_phone_number",
-        "payload": TEST_PHONE
+       "content_type":"user_phone_number"
       }
     ]
   };
@@ -230,7 +229,7 @@ function handleTestPhone(sender_psid){
     "quick_replies":[
       {
         "content_type":"text",
-        "title": "bruh"
+       "title": "bruh"
       }
     ]
   };
@@ -241,9 +240,6 @@ function handlePostback(sender_psid, received_postback) {
   // Get the payload for the postback
   const payload = received_postback.payload;
   // Set the response based on the postback payload
-  if (phoneUtil.isValidNumber(phoneUtil.parse(payload)))
-    handleTestPhone(sender_psid);
-
   switch (true){
     case payload === START_SEARCH_YES:
       handleStartSearchYesPostback(sender_psid);
@@ -259,6 +255,9 @@ function handlePostback(sender_psid, received_postback) {
       break;
     case payload === GREETING:
       handleGreetingPostback(sender_psid);
+      break;
+    case phoneUtil.isValidNumber(phoneUtil.parse(payload.toString())):
+      handleTestPhone(sender_psid);
       break;
     default:
       console.log('Cannot differentiate the payload type, treat it as a emtpy message');
