@@ -1,6 +1,7 @@
 'use strict';
 require('dotenv').config()
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const CONNECTION_STRING = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@trashmytrashcluster-yez26.mongodb.net/test?retryWrites=true&w=majority`;
 const START_SEARCH_NO = 'START_SEARCH_NO';
 const START_SEARCH_YES = 'START_SEARCH_YES';
 const GREETING = 'GREETING';
@@ -9,13 +10,20 @@ const AUSTRALIA_NO = 'AUSTRALIA_NO';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v7.0/';
 
+console.log(CONNECTION_STRING)
 const
   phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance(),
   request = require('request'),
   express = require('express'),
+  mongoose = require('mongoose'),
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
 
+// connects to mongoose (which is mongoDB for Node js)
+mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+  if (err) throw err;
+  console.log("DB Connected Successfully");
+})
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
