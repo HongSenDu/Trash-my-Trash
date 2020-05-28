@@ -3,11 +3,15 @@ mongoose = require('mongoose')
 const userSchema = require('./userSchema.js')
 User = mongoose.model('users', userSchema)
 
-async function createUser(sender_psid, point) {
+async function createUser(sender_psid, location) {
     return new User({
         PSID: sender_psid,
-        location: point
+        location: location
     }).save()
+}
+
+async function findUser(PSID) {
+    return await User.findOne({ PSID })
 }
 
 async function getCoords(city) {
@@ -28,4 +32,13 @@ async function getCoords(city) {
 
 }
 
-module.exports = { createUser, getCoords }
+function convertUsefulCoords(select_city) {
+    var usefulInfo = {
+        "formattedAddress": select_city.formattedAddress,
+        "latitude": select_city.latitude,
+        "longitude": select_city.longitude,
+    }
+    return usefulInfo;
+}
+
+module.exports = { createUser, findUser, getCoords, convertUsefulCoords }

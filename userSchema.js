@@ -7,15 +7,10 @@ const userSchema = new mongoose.Schema({
     location: {
         formattedAddress: String,
         latitude: Number,
-        longitude: Number,
-        city: String,
-        country: String,
-        countryCode: String
+        longitude: Number
     }
 
 })
 
 
-module.exports = {
-    userSchema: userSchema
-}
+module.exports = userSchema

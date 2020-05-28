@@ -24,20 +24,22 @@ const
 
 
 
-db.getCoords("New York City").then((value) => {
-  var select_city = value[0];
-  var usefulInfo = {
-    "formattedAddress": select_city.formattedAddress,
-    "latitude": select_city.latitude,
-    "longitude": select_city.longitude,
-  }
-  console.log(usefulInfo)
-})
-
 mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
   if (err) throw err;
   console.log("DB Connected Successfully");
 })
+
+db.getCoords("New York City").then((value) => {
+  var select_city = value[0];
+  db.createUser("bobbbyb", db.convertUsefulCoords(select_city)).then((value) => {
+      db.findUser("bobbbyb").then((value) => {
+        console.log(value);
+      })
+  })
+})
+
+
+
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
