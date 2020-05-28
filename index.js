@@ -9,6 +9,8 @@ const AUSTRALIA_YES = 'AUSTRALIA_YES';
 const AUSTRALIA_NO = 'AUSTRALIA_NO';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v7.0/';
+const ITEM = 'ITEM';
+const MATERIAL = 'MATERIAL';
 
 console.log(CONNECTION_STRING)
 const
@@ -239,6 +241,47 @@ function handleTestPhone(sender_psid) {
   callSendAPI(sender_psid, phonePayload);
 }
 
+function handleItemOrMaterial(sender_psid) {
+  const choice = {
+    "attachment":{
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": "Would you like to give an item or a material?",
+        "buttons":[
+          {
+            "type": "postback",
+            "title": "Item",
+            "payload": ITEM
+          },
+          {
+            "type": "postback",
+            "title": "Material",
+            "payload": MATERIAL
+          }
+        ]
+      }
+    }
+  };
+
+  // Send the response message
+  callSendAPI(sender_psid, choice);
+}
+
+function handleItemPostback(sender_psid) {
+  const item = {
+    "text": "Please state your item."
+  };
+  callSendAPI(sender_psid, item);
+}
+
+function handleMaterialPostback(sender_psid) {
+  const material = {
+    "text": "Please state your material."
+  };
+  callSendAPI(sender_psid, material);
+}
+
 function handlePostback(sender_psid, received_postback) {
   // Get the payload for the postback
   const payload = received_postback.payload;
@@ -250,6 +293,12 @@ function handlePostback(sender_psid, received_postback) {
       break;
     case payload === START_SEARCH_NO:
       handleStartSearchNoPostback(sender_psid);
+      break;
+    case payload === ITEM:
+      handleItemPostback(sender_psid);
+      break;
+    case payload === MATERIAL:
+      handleMaterialPostback(sender_psid);
       break;
     case payload === OTHER_HELP_YES:
       handleOtherHelpPostback(sender_psid);
@@ -299,4 +348,3 @@ function callSendAPI(sender_psid, response) {
     }
   });
 }
-
