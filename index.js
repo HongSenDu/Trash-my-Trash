@@ -29,6 +29,9 @@ mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology:
   console.log("DB Connected Successfully");
 })
 
+// Sample code of how to retrieve an user from the mongoDB database
+
+/*
 db.getCoords("New York City").then((value) => {
   var select_city = value[0];
   db.createUser("bobbbyb", db.convertUsefulCoords(select_city)).then((value) => {
@@ -37,6 +40,7 @@ db.getCoords("New York City").then((value) => {
       })
   })
 })
+*/
 
 
 

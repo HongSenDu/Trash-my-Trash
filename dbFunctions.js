@@ -19,7 +19,6 @@ async function getCoords(city) {
 
     const options = {
         provider: 'google',
-
         // Optional depending on the providers
         apiKey: process.env.GEOCODER_API, // for Mapquest, OpenCage, Google Premier
         formatter: null // 'gpx', 'string', ...
