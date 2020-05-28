@@ -20,6 +20,7 @@ const
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
 
+console.log(db.createPoint("Bob"))
 // connects to mongoose (which is mongoDB for Node js)
 mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
   if (err) throw err;

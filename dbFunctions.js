@@ -12,8 +12,8 @@ async function createUser(sender_psid, point) {
 
 async function createPoint(state) {
     return new Point({
-        PSID: sender_psid,
-        location: state
+        type: 'Point',
+        coordinates: state
     })
 }
 
