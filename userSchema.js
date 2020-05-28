@@ -13,13 +13,12 @@ const pointSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-    name: String,
     PSID: String,
     location: pointSchema
 })
 
 
 module.exports = {
-    userSchema: userSchema,
-    pointSchema: pointSchema
+    pointSchema: pointSchema,
+    userSchema: userSchema
 }

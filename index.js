@@ -16,6 +16,7 @@ const
   request = require('request'),
   express = require('express'),
   mongoose = require('mongoose'),
+  db = require('./dbFunctions.js'),
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
 
