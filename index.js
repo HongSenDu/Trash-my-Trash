@@ -5,6 +5,7 @@ const CONNECTION_STRING = `mongodb+srv://${process.env.DB_USER}:${process.env.DB
 const START_SEARCH_NO = 'START_SEARCH_NO';
 const START_SEARCH_YES = 'START_SEARCH_YES';
 const GREETING = 'GREETING';
+const GEOCODER_API = process.env.GEOCODER_API;
 const AUSTRALIA_YES = 'AUSTRALIA_YES';
 const AUSTRALIA_NO = 'AUSTRALIA_NO';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
@@ -20,8 +21,19 @@ const
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
 
-console.log(db.createPoint("Bob"))
-// connects to mongoose (which is mongoDB for Node js)
+
+
+
+db.getCoords("New York City").then((value) => {
+  var select_city = value[0];
+  var usefulInfo = {
+    "formattedAddress": select_city.formattedAddress,
+    "latitude": select_city.latitude,
+    "longitude": select_city.longitude,
+  }
+  console.log(usefulInfo)
+})
+
 mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
   if (err) throw err;
   console.log("DB Connected Successfully");

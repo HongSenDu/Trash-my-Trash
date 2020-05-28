@@ -16,6 +16,7 @@
     "google-libphonenumber": "^3.2.10",
     "libphonenumber-js": "^1.7.52",
     "mongoose": "^5.9.16",
+    "node-geocoder": "^3.27.0",
     "request": "^2.88.2"
   },
   "repository": "git@github.com:HongSenDu/Trash-my-Trash"

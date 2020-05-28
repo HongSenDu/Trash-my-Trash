@@ -1,24 +1,21 @@
 const mongoose = require('mongoose')
 
-const pointSchema = new mongoose.Schema({
-    type: {
-        type: String,
-        enum: ['Point'],
-        required: true
-    },
-    coordinates: {
-        type: [Number],
-        required: true
-    }
-});
+
 
 const userSchema = new mongoose.Schema({
     PSID: String,
-    location: pointSchema
+    location: {
+        formattedAddress: String,
+        latitude: Number,
+        longitude: Number,
+        city: String,
+        country: String,
+        countryCode: String
+    }
+
 })
 
 
 module.exports = {
-    pointSchema: pointSchema,
     userSchema: userSchema
 }

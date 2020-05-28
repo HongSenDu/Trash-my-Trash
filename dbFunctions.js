@@ -1,6 +1,6 @@
+require('dotenv').config()
 mongoose = require('mongoose')
-const {pointSchema, userSchema} = require('./userSchema.js')
-Point = mongoose.model('points', pointSchema)
+const userSchema = require('./userSchema.js')
 User = mongoose.model('users', userSchema)
 
 async function createUser(sender_psid, point) {
@@ -10,11 +10,22 @@ async function createUser(sender_psid, point) {
     }).save()
 }
 
-async function createPoint(state) {
-    return new Point({
-        type: 'Point',
-        coordinates: state
-    })
+async function getCoords(city) {
+    const NodeGeocoder = require('node-geocoder');
+
+    const options = {
+        provider: 'google',
+
+        // Optional depending on the providers
+        apiKey: process.env.GEOCODER_API, // for Mapquest, OpenCage, Google Premier
+        formatter: null // 'gpx', 'string', ...
+    };
+    const geocoder = NodeGeocoder(options);
+
+    // Using callback
+    const res = await geocoder.geocode(city);
+    return res
+
 }
 
-module.exports = { createUser, createPoint }
+module.exports = { createUser, getCoords }
