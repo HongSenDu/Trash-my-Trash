@@ -5,9 +5,7 @@ const CONNECTION_STRING = `mongodb+srv://${process.env.DB_USER}:${process.env.DB
 const START_SEARCH_NO = 'START_SEARCH_NO';
 const START_SEARCH_YES = 'START_SEARCH_YES';
 const GREETING = 'GREETING';
-const GEOCODER_API = process.env.GEOCODER_API;
 const AUSTRALIA_YES = 'AUSTRALIA_YES';
-const AUSTRALIA_NO = 'AUSTRALIA_NO';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v7.0/';
 
@@ -84,7 +82,6 @@ app.post('/webhook', (req, res) => {
 
   } else {
     // Return a '404 Not Found' if event is not from a page subscription
-
     res.sendStatus(404);
   }
 });
@@ -94,7 +91,6 @@ app.get('/webhook', (req, res) => {
 
   /** UPDATE YOUR VERIFY TOKEN **/
   const VERIFY_TOKEN = "68hIGOi2qM";
-
 
   // Parse params from the webhook verification request
   let mode = req.query['hub.mode'];
