@@ -92,18 +92,18 @@ app.get('/webhook', (req, res) => {
   }
 });
 
+
+// ================================
+// Begining of Sophia's Code
+// ================================
 function handleMessage(sender_psid) {
   const response = {
-    "text": "Hi are you on the Trash My Trash Team",
+    "text": "Hi are you on the Trash My Trash Team. Message 'Help' at any time for a list of possible commands."
     "quick_replies": [
       {
         "content_type": "text",
-        "title": "Yes!",
-        "payload": START_SEARCH_YES
-      }, {
-        "content_type": "text",
-        "title": "No, thanks.",
-        "payload": START_SEARCH_NO
+        "title": "I'm so excited to join!",
+        "payload": START_CONVERSATION
       }
     ]
   };
@@ -112,44 +112,44 @@ function handleMessage(sender_psid) {
   callSendAPI(sender_psid, response);
 }
 
-// ================================
-// Begining of Sophia's Code
-// ================================
-// This is the intoduction to get a user's state's abbreviation
-function introductionDialogueHandle(sender_psid) {
-  const response = {
-    "text": "Hi are you on the Trash My Trash Team. Message 'Help' at any time for a list of possible commands."
-    "text": "To start, please type in your state's abbreviation so we can give you the correct recycling requirements for your state",
-    "quick_replies": [
-      {
-        // I want to only post to the webhook if it recognizes that the abbreviation is an actual state, no made up
-        "content_type": "text",
-        "title": "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
-        "payload": START_SEARCH_YES
-      }, {
-        "content_type": "text",
-        "title": "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", 
-        "payload": START_SEARCH_YES
-      }, {
-        // If not in the the directory, (I don't know how "else" is formated), it gives a different error message
-        "content_type": "text",
-        "title": "",
-        "payload": START_SEARCH_NO
-      }
-    ]
-  };
-// This may be another way to get the abbreviation  
+
+// This is the intoduction to get a user's state's abbreviation  
 function handleAustraliaYesPostback(sender_psid) {
   const askForStateAbbreviation = {
-    "text": "What is your phone number",
+    "text": "What is your state's abbreviation?",
     "quick_replies": [
       {
         "content_type": "state_abbreviation"
       }
+     // I want an if/else so if it's in the list of abbreviaitons, it has a payload: START_SEARCH_YES
     ]
   };
   callSendAPI(sender_psid, askForStateAbbreviation);
 }
+
+
+// This may be another way to get the abbreviation
+//function introductionDialogueHandle(sender_psid) {
+//  const response = {
+//    "text": "To start, please type in your state's abbreviation so we can give you the correct recycling requirements for your state",
+//    "quick_replies": [
+//      {
+        // I want to only post to the webhook if it recognizes that the abbreviation is an actual state, no made up
+//        "content_type": "text",
+//        "title": "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
+//        "payload": START_SEARCH_YES
+//      }, {
+ //       "content_type": "text",
+//        "title": "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", 
+//        "payload": START_SEARCH_YES
+//      }, {
+//        // If not in the the directory, (I don't know how "else" is formated), it gives a different error message
+//        "content_type": "text",
+//        "title": "",
+//        "payload": START_SEARCH_NO
+ //     }
+//    ]
+//  };
 
 // This is the function when the user types in a correct abbreviation. Also starts the recycling dialogue
 function handleStartSearchYesPostback(sender_psid) {
@@ -163,7 +163,7 @@ function handleStartSearchYesPostback(sender_psid) {
 // This is the function when the user types in a wrong abbreviation.
 function handleStartSearchNoPostback(sender_psid) {
   const noPayload = {
-    "text": "Sorry, we did not find your state abbreviation in our database. Ex: New York --> NY, Texas --> TX",
+    "text": "Sorry, we did not find your state abbreviation in our database. Please try again. Ex: New York --> NY, Texas --> TX",
     "quick_replies": [
       {
         "content_type": "text",
@@ -182,6 +182,9 @@ function handlePostback(sender_psid, received_postback) {
 
   // Set the response based on the postback payload
   switch (true) {
+    case payload === START_CONVERSATION:
+      introductionDialogueHandle(sender_psid);
+      break;
     case payload === START_SEARCH_YES:
       handleStartSearchYesPostback(sender_psid);
       break;
