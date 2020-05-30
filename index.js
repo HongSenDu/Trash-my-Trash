@@ -127,12 +127,14 @@ function handleAustraliaYesPostback(sender_psid) {
       }
      // I want an if/else so if it's in the list of abbreviaitons, it has a payload: START_SEARCH_YES
     ]
+  };
+  
   if askForStateAbbreviation in "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", :
     "payload": ABBREVIATION_CORRECT;
   else:
     "payload": ABBREVIATION_INCORRECT;
     
-  };
+  
   callSendAPI(sender_psid, askForStateAbbreviation);
 }
 
