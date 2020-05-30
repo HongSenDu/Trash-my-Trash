@@ -92,6 +92,70 @@ app.get('/webhook', (req, res) => {
   }
 });
 
+// ================================
+// Begining of Sophia's Code
+// ================================
+// This is the intoduction to get a user's state's abbreviation
+function introductionDialogueHandle(sender_psid) {
+  const response = {
+    "text": "Hi are you on the Trash My Trash Team. Message 'Help' at any time for a list of possible commands. To start, please type in your state's abbreviation so we can give you the correct recycling requirements for your state",
+    "quick_replies": [
+      {
+        "content_type": "text",
+        "title": "Yes!",
+        "payload": START_SEARCH_YES
+      }, {
+        "content_type": "text",
+        "title": "No, thanks.",
+        "payload": START_SEARCH_NO
+      }
+    ]
+  };
+
+// I think this is how we recieve the abbreviation
+function handleTestPhone(sender_psid) {
+  const phonePayload = {
+    "text": "BRB, selling your phone number on the dark web"
+  };
+  callSendAPI(sender_psid, phonePayload);
+}
+
+function handlePostback(sender_psid, received_postback) {
+  // Get the payload for the postback
+  const payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  switch (true) {
+    case payload === START_SEARCH_YES:
+      handleStartSearchYesPostback(sender_psid);
+      break;
+    case payload === START_SEARCH_NO:
+      handleStartSearchNoPostback(sender_psid);
+      break;
+    case payload === OTHER_HELP_YES:
+      handleOtherHelpPostback(sender_psid);
+      break;
+    case payload === AUSTRALIA_YES:
+      handleAustraliaYesPostback(sender_psid);
+      break;
+    case payload === GREETING:
+      handleGreetingPostback(sender_psid);
+      break;
+    case checkPhoneNumber(payload):
+      handleTestPhone(sender_psid);
+      break;
+    default:
+      console.log('Cannot differentiate the payload type, treat it as a emtpy message');
+      handleMessage(sender_psid);
+  }
+}
+
+
+
+
+// ================================
+// End of Sophia's Code
+// ================================
 function handleMessage(sender_psid) {
   const response = {
     "text": "Hi are you on the Trash My Trash Team",
