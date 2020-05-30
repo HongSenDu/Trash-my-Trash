@@ -92,70 +92,6 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-// ================================
-// Begining of Sophia's Code
-// ================================
-// This is the intoduction to get a user's state's abbreviation
-function introductionDialogueHandle(sender_psid) {
-  const response = {
-    "text": "Hi are you on the Trash My Trash Team. Message 'Help' at any time for a list of possible commands. To start, please type in your state's abbreviation so we can give you the correct recycling requirements for your state",
-    "quick_replies": [
-      {
-        "content_type": "text",
-        "title": "Yes!",
-        "payload": START_SEARCH_YES
-      }, {
-        "content_type": "text",
-        "title": "No, thanks.",
-        "payload": START_SEARCH_NO
-      }
-    ]
-  };
-
-// I think this is how we recieve the abbreviation
-function handleTestPhone(sender_psid) {
-  const phonePayload = {
-    "text": "BRB, selling your phone number on the dark web"
-  };
-  callSendAPI(sender_psid, phonePayload);
-}
-
-function handlePostback(sender_psid, received_postback) {
-  // Get the payload for the postback
-  const payload = received_postback.payload;
-
-  // Set the response based on the postback payload
-  switch (true) {
-    case payload === START_SEARCH_YES:
-      handleStartSearchYesPostback(sender_psid);
-      break;
-    case payload === START_SEARCH_NO:
-      handleStartSearchNoPostback(sender_psid);
-      break;
-    case payload === OTHER_HELP_YES:
-      handleOtherHelpPostback(sender_psid);
-      break;
-    case payload === AUSTRALIA_YES:
-      handleAustraliaYesPostback(sender_psid);
-      break;
-    case payload === GREETING:
-      handleGreetingPostback(sender_psid);
-      break;
-    case checkPhoneNumber(payload):
-      handleTestPhone(sender_psid);
-      break;
-    default:
-      console.log('Cannot differentiate the payload type, treat it as a emtpy message');
-      handleMessage(sender_psid);
-  }
-}
-
-
-
-
-// ================================
-// End of Sophia's Code
-// ================================
 function handleMessage(sender_psid) {
   const response = {
     "text": "Hi are you on the Trash My Trash Team",
@@ -175,6 +111,101 @@ function handleMessage(sender_psid) {
   // Send the response message
   callSendAPI(sender_psid, response);
 }
+
+// ================================
+// Begining of Sophia's Code
+// ================================
+// This is the intoduction to get a user's state's abbreviation
+function introductionDialogueHandle(sender_psid) {
+  const response = {
+    "text": "Hi are you on the Trash My Trash Team. Message 'Help' at any time for a list of possible commands."
+    "text": "To start, please type in your state's abbreviation so we can give you the correct recycling requirements for your state",
+    "quick_replies": [
+      {
+        // I want to only post to the webhook if it recognizes that the abbreviation is an actual state, no made up
+        "content_type": "text",
+        "title": "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
+        "payload": START_SEARCH_YES
+      }, {
+        "content_type": "text",
+        "title": "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", 
+        "payload": START_SEARCH_YES
+      }, {
+        // If not in the the directory, (I don't know how "else" is formated), it gives a different error message
+        "content_type": "text",
+        "title": "",
+        "payload": START_SEARCH_NO
+      }
+    ]
+  };
+// This may be another way to get the abbreviation  
+function handleAustraliaYesPostback(sender_psid) {
+  const askForStateAbbreviation = {
+    "text": "What is your phone number",
+    "quick_replies": [
+      {
+        "content_type": "state_abbreviation"
+      }
+    ]
+  };
+  callSendAPI(sender_psid, askForStateAbbreviation);
+}
+
+// This is the function when the user types in a correct abbreviation. Also starts the recycling dialogue
+function handleStartSearchYesPostback(sender_psid) {
+  const correctAbbreviation = {
+    "text": "Thank you. Now we can begin. What would you like to throw away/ recycle today?",
+  };
+    callSendAPI(sender_psid, correctAbbreviation);
+}
+    
+    
+// This is the function when the user types in a wrong abbreviation.
+function handleStartSearchNoPostback(sender_psid) {
+  const noPayload = {
+    "text": "Sorry, we did not find your state abbreviation in our database. Ex: New York --> NY, Texas --> TX",
+    "quick_replies": [
+      {
+        "content_type": "text",
+        "title": "Ok. I'll try again",
+        "payload": OTHER_HELP_YES
+      }
+    ]
+  };
+  callSendAPI(sender_psid, noPayload);
+}
+
+
+function handlePostback(sender_psid, received_postback) {
+  // Get the payload for the postback
+  const payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  switch (true) {
+    case payload === START_SEARCH_YES:
+      handleStartSearchYesPostback(sender_psid);
+      break;
+    case payload === START_SEARCH_NO:
+      handleStartSearchNoPostback(sender_psid);
+      break;
+    case payload === OTHER_HELP_YES:
+      introductionDialogueHandle(sender_psid);
+      break;
+    case payload === AUSTRALIA_YES:
+      handleAustraliaYesPostback(sender_psid);
+      break;
+    default:
+      console.log('Cannot differentiate the payload type, treat it as a emtpy message');
+      handleMessage(sender_psid);
+  }
+}
+
+
+
+
+// ================================
+// End of Sophia's Code
+// ================================
 
 function handleStartSearchYesPostback(sender_psid) {
   const yesPayload = {
