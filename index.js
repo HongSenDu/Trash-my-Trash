@@ -133,29 +133,6 @@ function handleAustraliaYesPostback(sender_psid) {
 }
 
 
-// This may be another way to get the abbreviation
-//function introductionDialogueHandle(sender_psid) {
-//  const response = {
-//    "text": "To start, please type in your state's abbreviation so we can give you the correct recycling requirements for your state",
-//    "quick_replies": [
-//      {
-        // I want to only post to the webhook if it recognizes that the abbreviation is an actual state, no made up
-//        "content_type": "text",
-//        "title": "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
-//        "payload": START_SEARCH_YES
-//      }, {
- //       "content_type": "text",
-//        "title": "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", 
-//        "payload": START_SEARCH_YES
-//      }, {
-//        // If not in the the directory, (I don't know how "else" is formated), it gives a different error message
-//        "content_type": "text",
-//        "title": "",
-//        "payload": START_SEARCH_NO
- //     }
-//    ]
-//  };
-
 // This is the function when the user types in a correct abbreviation. Also starts the recycling dialogue
 function rightAbbreviation(sender_psid) {
   const correctAbbreviation = {
