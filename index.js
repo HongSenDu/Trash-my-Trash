@@ -123,6 +123,11 @@ function handleAustraliaYesPostback(sender_psid) {
       }
      // I want an if/else so if it's in the list of abbreviaitons, it has a payload: START_SEARCH_YES
     ]
+  if askForStateAbbreviation in "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", :
+    "payload": ABBREVIATION_CORRECT;
+  else:
+    "payload": ABBREVIATION_INCORRECT;
+    
   };
   callSendAPI(sender_psid, askForStateAbbreviation);
 }
@@ -152,7 +157,7 @@ function handleAustraliaYesPostback(sender_psid) {
 //  };
 
 // This is the function when the user types in a correct abbreviation. Also starts the recycling dialogue
-function handleStartSearchYesPostback(sender_psid) {
+function rightAbbreviation(sender_psid) {
   const correctAbbreviation = {
     "text": "Thank you. Now we can begin. What would you like to throw away/ recycle today?",
   };
@@ -161,14 +166,14 @@ function handleStartSearchYesPostback(sender_psid) {
     
     
 // This is the function when the user types in a wrong abbreviation.
-function handleStartSearchNoPostback(sender_psid) {
+function wrongAbbreviation(sender_psid) {
   const noPayload = {
     "text": "Sorry, we did not find your state abbreviation in our database. Please try again. Ex: New York --> NY, Texas --> TX",
     "quick_replies": [
       {
         "content_type": "text",
         "title": "Ok. I'll try again",
-        "payload": OTHER_HELP_YES
+        "payload": TRY_AGAIN
       }
     ]
   };
@@ -185,13 +190,13 @@ function handlePostback(sender_psid, received_postback) {
     case payload === START_CONVERSATION:
       introductionDialogueHandle(sender_psid);
       break;
-    case payload === START_SEARCH_YES:
-      handleStartSearchYesPostback(sender_psid);
+    case payload === ABBREVIATION_CORRECT:
+      rightAbbreviation(sender_psid);
       break;
-    case payload === START_SEARCH_NO:
-      handleStartSearchNoPostback(sender_psid);
+    case payload === ABBREVIATION_INCORRECT:
+      wrongAbbreviation(sender_psid);
       break;
-    case payload === OTHER_HELP_YES:
+    case payload === TRY_AGAIN:
       introductionDialogueHandle(sender_psid);
       break;
     case payload === AUSTRALIA_YES:
