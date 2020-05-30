@@ -1,3 +1,4 @@
+// Sophia
 'use strict';
 require('dotenv').config()
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
@@ -7,6 +8,10 @@ const START_SEARCH_YES = 'START_SEARCH_YES';
 const GREETING = 'GREETING';
 const AUSTRALIA_YES = 'AUSTRALIA_YES';
 const OTHER_HELP_YES = 'OTHER_HELP_YES';
+const START_CONVERSATION = "START_CONVERSATION"
+const ABBREVIATION_CORRECT = "ABBREVIATION_CORRECT"
+const ABBREVIATION_INCORRECT = "ABBREVIATION_INCORRECT"
+const TRY_AGAIN = "TRY_AGAIN"
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v7.0/';
 
 console.log(CONNECTION_STRING)
@@ -115,18 +120,18 @@ app.get('/webhook', (req, res) => {
   }
 });
 
+
+// ================================
+// Begining of Sophia's Code
+// ================================
 function handleMessage(sender_psid) {
   const response = {
-    "text": "Hi are you on the Trash My Trash Team",
+    "text": "Hi are you on the Trash My Trash Team. Message 'Help' at any time for a list of possible commands."
     "quick_replies": [
       {
         "content_type": "text",
-        "title": "Yes!",
-        "payload": START_SEARCH_YES
-      }, {
-        "content_type": "text",
-        "title": "No, thanks.",
-        "payload": START_SEARCH_NO
+        "title": "I'm so excited to join!",
+        "payload": START_CONVERSATION
       }
     ]
   };
@@ -134,6 +139,88 @@ function handleMessage(sender_psid) {
   // Send the response message
   callSendAPI(sender_psid, response);
 }
+
+
+// This is the intoduction to get a user's state's abbreviation  
+function handleAustraliaYesPostback(sender_psid) {
+  const askForStateAbbreviation = {
+    "text": "What is your state's abbreviation?",
+    "quick_replies": [
+      {
+        "content_type": "state_abbreviation"
+      }
+     // I want an if/else so if it's in the list of abbreviaitons, it has a payload: START_SEARCH_YES
+    ]
+  };
+  
+  if askForStateAbbreviation in "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", :
+    "payload": ABBREVIATION_CORRECT;
+  else:
+    "payload": ABBREVIATION_INCORRECT;
+    
+  
+  callSendAPI(sender_psid, askForStateAbbreviation);
+}
+
+
+// This is the function when the user types in a correct abbreviation. Also starts the recycling dialogue
+function rightAbbreviation(sender_psid) {
+  const correctAbbreviation = {
+    "text": "Thank you. Now we can begin. What would you like to throw away/ recycle today?",
+  };
+    callSendAPI(sender_psid, correctAbbreviation);
+}
+    
+    
+// This is the function when the user types in a wrong abbreviation.
+function wrongAbbreviation(sender_psid) {
+  const noPayload = {
+    "text": "Sorry, we did not find your state abbreviation in our database. Please try again. Ex: New York --> NY, Texas --> TX",
+    "quick_replies": [
+      {
+        "content_type": "text",
+        "title": "Ok. I'll try again",
+        "payload": TRY_AGAIN
+      }
+    ]
+  };
+  callSendAPI(sender_psid, noPayload);
+}
+
+
+function handlePostback(sender_psid, received_postback) {
+  // Get the payload for the postback
+  const payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  switch (true) {
+    case payload === START_CONVERSATION:
+      introductionDialogueHandle(sender_psid);
+      break;
+    case payload === ABBREVIATION_CORRECT:
+      rightAbbreviation(sender_psid);
+      break;
+    case payload === ABBREVIATION_INCORRECT:
+      wrongAbbreviation(sender_psid);
+      break;
+    case payload === TRY_AGAIN:
+      introductionDialogueHandle(sender_psid);
+      break;
+    case payload === AUSTRALIA_YES:
+      handleAustraliaYesPostback(sender_psid);
+      break;
+    default:
+      console.log('Cannot differentiate the payload type, treat it as a emtpy message');
+      handleMessage(sender_psid);
+  }
+}
+
+console.log("hi")
+
+
+// ================================
+// End of Sophia's Code
+// ================================
 
 function handleStartSearchYesPostback(sender_psid) {
   const yesPayload = {
