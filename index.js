@@ -177,16 +177,12 @@ function initialGreeting(sender_psid) {
     db.findUser(sender_psid).then(() => {
       return callSendAPI(sender_psid, response2);
     }).catch(() => {
-      stateInfo(sender_psid);
+      const explain = {
+        "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
+      };
+      return callSendAPI(sender_psid, explain)
     })
   })
-}
-
-function stateInfo(sender_psid) {
-  const explain = {
-    "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
-  };
-  return callSendAPI(sender_psid, explain)
 }
 
 function handleItemPostback(sender_psid) {
