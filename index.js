@@ -196,7 +196,7 @@ function handlePostback(sender_psid, received_postback) {
       break;
     default:
       console.log('Cannot differentiate the payload type, treat it as a emtpy message');
-      handleItemOrMaterial(payload);
+      handleItemOrMaterial(sender_psid);
   }
 }
 
