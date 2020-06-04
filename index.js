@@ -177,23 +177,27 @@ function initialGreeting(sender_psid) {
   callSendAPI(sender_psid, greeting).then(() => {
     db.findUser(sender_psid).then((value) => {
       if (value === null) {
-        console.log("hi")
-        getState(sender_psid)
+        const explain = {
+          "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
+        };
+        return callSendAPI(sender_psid, explain).then(() => {
+          console.log("this works")
+        })
       }
     }).catch((err) => {
       console.log(err);
     })
   })
 }
-
+/*
 function getState(sender_psid) {
-
   const explain = {
     "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
   };
   callSendAPI(sender_psid, explain)
 
 }
+*/
 
 function handleItemPostback(sender_psid) {
   const item = {
