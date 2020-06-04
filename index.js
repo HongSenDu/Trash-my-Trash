@@ -72,7 +72,7 @@ app.post('/webhook', (req, res) => {
         if (webhook_event.message.quick_reply) {
           handlePostback(sender_psid, webhook_event.message.quick_reply);
         } else {
-          handleMessage(sender_psid);
+          handlePostback(sender_psid, webhook_event.message);
         }
       }
     });
