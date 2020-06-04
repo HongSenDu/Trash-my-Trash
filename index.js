@@ -4,9 +4,6 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const CONNECTION_STRING = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@trashmytrashcluster-yez26.mongodb.net/test?retryWrites=true&w=majority`;
 const START_SEARCH_NO = 'START_SEARCH_NO';
 const START_SEARCH_YES = 'START_SEARCH_YES';
-const GREETING = 'GREETING';
-const AUSTRALIA_YES = 'AUSTRALIA_YES';
-const OTHER_HELP_YES = 'OTHER_HELP_YES';
 const FACEBOOK_GRAPH_API_BASE_URL = 'https://graph.facebook.com/v7.0/';
 const ITEM = 'ITEM';
 const MATERIAL = 'MATERIAL';
@@ -35,9 +32,9 @@ mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology:
 db.getCoords("MO").then((value) => {
   var select_city = value[0];
   db.createUser("bobbbybcd", db.convertUsefulCoords(select_city)).then((value) => {
-      db.findUser("bobbbybcd").then((value) => {
-        console.log(value);
-      })
+    db.findUser("bobbbybcd").then((value) => {
+      console.log(value);
+    })
   })
 })
 
@@ -137,117 +134,6 @@ function handleMessage(sender_psid) {
   callSendAPI(sender_psid, response);
 }
 
-function handleStartSearchYesPostback(sender_psid) {
-  const yesPayload = {
-    "text": "Ok then you're cool",
-    "quick_replies": [
-      {
-        "content_type": "text",
-        "title": "I want to give you my phone number",
-        "payload": AUSTRALIA_YES
-      }
-    ]
-  };
-  callSendAPI(sender_psid, yesPayload);
-}
-
-function handleStartSearchNoPostback(sender_psid) {
-  const noPayload = {
-    "text": "You're not cool then",
-    "quick_replies": [
-      {
-        "content_type": "text",
-        "title": "Yes.",
-        "payload": OTHER_HELP_YES
-      }
-    ]
-  };
-  callSendAPI(sender_psid, noPayload);
-}
-
-function handleOtherHelpPostback(sender_psid) {
-  const campaigns = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "generic",
-        "elements": [
-          {
-            "title": "We need your help",
-            "image_url": "http://awsassets.panda.org/img/original/wwf_infographic_tropical_deforestation.jpg",
-            "subtitle": "to save our natural world",
-            "buttons": [
-              {
-                "type": "web_url",
-                "url": "https://donate.wwf.org.au/campaigns/rhinoappeal/",
-                "title": "Javan Rhino Appeal"
-              }, {
-                "type": "web_url",
-                "url": "https://donate.wwf.org.au/campaigns/donate/#AD",
-                "title": "Adopt an Animal"
-              }, {
-                "type": "web_url",
-                "url": "https://donate.wwf.org.au/campaigns/wildcards/",
-                "title": "Send a wildcard"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  };
-  callSendAPI(sender_psid, campaigns);
-}
-
-function handleGreetingPostback(sender_psid) {
-  request({
-    url: `${FACEBOOK_GRAPH_API_BASE_URL}${sender_psid}`,
-    qs: {
-      access_token: process.env.PAGE_ACCESS_TOKEN,
-      fields: "first_name"
-    },
-    method: "GET"
-  }, function (error, response, body) {
-    var greeting = "";
-    if (error) {
-      console.log("Error getting user's name: " + error);
-    } else {
-      var bodyObj = JSON.parse(body);
-      const name = bodyObj.first_name;
-      greeting = "Hi " + name + ". ";
-    }
-    const message = greeting + "Would you like to join a community of like-minded pandas in your area?";
-    const greetingPayload = {
-      "text": message,
-      "quick_replies": [
-        {
-          "content_type": "text",
-          "title": "Yes!",
-          "payload": START_SEARCH_YES
-        },
-        {
-          "content_type": "text",
-          "title": "No, thanks.",
-          "payload": START_SEARCH_NO
-        }
-      ]
-    };
-    callSendAPI(sender_psid, greetingPayload);
-  });
-}
-
-function handleAustraliaYesPostback(sender_psid) {
-  const askForPhoneNumberPayload = {
-    "text": "What is your phone number",
-    "quick_replies": [
-      {
-        "content_type": "user_phone_number"
-      }
-    ]
-  };
-  callSendAPI(sender_psid, askForPhoneNumberPayload);
-}
-
 function handleTestPhone(sender_psid) {
   const phonePayload = {
     "text": "BRB, selling your phone number on the dark web"
@@ -257,12 +143,12 @@ function handleTestPhone(sender_psid) {
 
 function handleItemOrMaterial(sender_psid) {
   const choice = {
-    "attachment":{
+    "attachment": {
       "type": "template",
       "payload": {
         "template_type": "button",
         "text": "Would you like to give an item or a material?",
-        "buttons":[
+        "buttons": [
           {
             "type": "postback",
             "title": "Item",
@@ -302,33 +188,15 @@ function handlePostback(sender_psid, received_postback) {
 
   // Set the response based on the postback payload
   switch (true) {
-    case payload === START_SEARCH_YES:
-      handleStartSearchYesPostback(sender_psid);
-      break;
-    case payload === START_SEARCH_NO:
-      handleStartSearchNoPostback(sender_psid);
-      break;
     case payload === ITEM:
       handleItemPostback(sender_psid);
       break;
     case payload === MATERIAL:
       handleMaterialPostback(sender_psid);
       break;
-    case payload === OTHER_HELP_YES:
-      handleOtherHelpPostback(sender_psid);
-      break;
-    case payload === AUSTRALIA_YES:
-      handleAustraliaYesPostback(sender_psid);
-      break;
-    case payload === GREETING:
-      handleGreetingPostback(sender_psid);
-      break;
-    case checkPhoneNumber(payload):
-      handleTestPhone(sender_psid);
-      break;
     default:
       console.log('Cannot differentiate the payload type, treat it as a emtpy message');
-      handleMessage(sender_psid);
+      handleItemOrMaterial(payload);
   }
 }
 
