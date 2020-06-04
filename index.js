@@ -10,6 +10,7 @@ const MATERIAL = 'MATERIAL';
 
 console.log(CONNECTION_STRING)
 const
+  fetch = require('node-fetch'),
   phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance(),
   request = require('request'),
   express = require('express'),
@@ -147,7 +148,7 @@ function handleItemOrMaterial(sender_psid) {
       "type": "template",
       "payload": {
         "template_type": "button",
-        "text": "Would you like to give an item or a material?",
+        "text": "Would you like more information on recycling an item or a material?",
         "buttons": [
           {
             "type": "postback",
@@ -163,9 +164,29 @@ function handleItemOrMaterial(sender_psid) {
       }
     }
   };
-
   // Send the response message
   callSendAPI(sender_psid, choice);
+}
+
+function initialGreeting(sender_psid) {
+  const greeting = {
+    "text": "Hi! Thanks for using the Trash my Trash messenger bot!"
+  };
+
+  callSendAPI(sender_psid, greeting).then(() => {
+    db.findUser(sender_psid).then(() => {
+      return callSendAPI(sender_psid, response2);
+    }).catch(() => {
+      stateInfo(sender_psid);
+    })
+  })
+}
+
+function stateInfo(sender_psid) {
+  const explain = {
+    "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
+  };
+  return callSendAPI(sender_psid, explain)
 }
 
 function handleItemPostback(sender_psid) {
@@ -195,8 +216,7 @@ function handlePostback(sender_psid, received_postback) {
       handleMaterialPostback(sender_psid);
       break;
     default:
-      console.log('Cannot differentiate the payload type, treat it as a emtpy message');
-      handleItemOrMaterial(sender_psid);
+      initialGreeting(sender_psid);
   }
 }
 
@@ -218,7 +238,14 @@ function callSendAPI(sender_psid, response) {
     "message": response
   }
 
+  const qs = 'access_token=' + encodeURIComponent(PAGE_ACCESS_TOKEN); // Here you'll need to add your PAGE TOKEN from Facebook
+  return fetch('https://graph.facebook.com/me/messages?' + qs, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request_body),
+  });
   // Send the HTTP request to the Messenger Platform
+
   request({
     "uri": `${FACEBOOK_GRAPH_API_BASE_URL}me/messages`,
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
