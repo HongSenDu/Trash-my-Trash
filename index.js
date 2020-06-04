@@ -29,7 +29,7 @@ mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology:
 
 // Sample code of how to retrieve an user from the mongoDB database
 
-
+/*
 db.getCoords("MO").then((value) => {
   var select_city = value[0];
   db.createUser("bobbbybcd", db.convertUsefulCoords(select_city)).then((value) => {
@@ -38,6 +38,7 @@ db.getCoords("MO").then((value) => {
     })
   })
 })
+*/
 
 
 
@@ -174,15 +175,22 @@ function initialGreeting(sender_psid) {
   };
 
   callSendAPI(sender_psid, greeting).then(() => {
-    db.findUser(sender_psid).then(() => {
-      return callSendAPI(sender_psid, response2);
-    }).catch(() => {
-      const explain = {
-        "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
-      };
-      return callSendAPI(sender_psid, explain)
+    db.findUser(sender_psid).then((value) => {
+      if (value === null)
+        getState(sender_psid)
+    }).catch((err) => {
+      console.log(err);
     })
   })
+}
+
+function getState(sender_psid) {
+
+  const explain = {
+    "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
+  };
+  return callSendAPI(sender_psid, explain)
+
 }
 
 function handleItemPostback(sender_psid) {
@@ -241,15 +249,16 @@ function callSendAPI(sender_psid, response) {
     body: JSON.stringify(request_body),
   });
   // Send the HTTP request to the Messenger Platform
-
-  request({
-    "uri": `${FACEBOOK_GRAPH_API_BASE_URL}me/messages`,
-    "qs": { "access_token": PAGE_ACCESS_TOKEN },
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
+  /*
+      request({
+        "uri": `${FACEBOOK_GRAPH_API_BASE_URL}me/messages`,
+        "qs": { "access_token": PAGE_ACCESS_TOKEN },
+        "method": "POST",
+        "json": request_body
+      }, (err, res, body) => {
+        if (err) {
+          console.error("Unable to send message:" + err);
+        }
+      });
+      */
 }
