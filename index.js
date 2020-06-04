@@ -176,8 +176,10 @@ function initialGreeting(sender_psid) {
 
   callSendAPI(sender_psid, greeting).then(() => {
     db.findUser(sender_psid).then((value) => {
-      if (value === null)
+      if (value === null) {
+        console.log("hi")
         getState(sender_psid)
+      }
     }).catch((err) => {
       console.log(err);
     })
@@ -189,7 +191,7 @@ function getState(sender_psid) {
   const explain = {
     "text": "Please tell us the city you reside in so we can tailor our information to be more accurate to your local guidelines"
   };
-  return callSendAPI(sender_psid, explain)
+  callSendAPI(sender_psid, explain)
 
 }
 
@@ -243,7 +245,7 @@ function callSendAPI(sender_psid, response) {
   }
 
   const qs = 'access_token=' + encodeURIComponent(PAGE_ACCESS_TOKEN); // Here you'll need to add your PAGE TOKEN from Facebook
-  return fetch('https://graph.facebook.com/me/messages?' + qs, {
+  return fetch(`${FACEBOOK_GRAPH_API_BASE_URL}/me/messages?` + qs, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request_body),
